@@ -319,23 +319,27 @@
     "invalid": "Valore non valido"
   },
   "shared": {
-    "actions": {
-      "cancel": "Annulla",
-      "delete": "Elimina",
-      "edit": "Modifica",
-      "remove": "Rimuovi",
-      "save": "Salva"
-    },
+    "delete": "Elimina",
+    "remove": "Rimuovi",
     "cancel": "Annulla",
+    "edit": "Modifica",
+    "save": "Salva",
+    "upload": "Carica",
     "colorInput": {
       "invalid": "Formato esadecimale non valido (es: #000000 o #FFF)",
       "label": "Colore"
     },
-    "edit": "Modifica",
     "imageInput": {
-      "label": "Immagine"
+      "selectImage": "Seleziona immagine...",
+      "downloadErrorTitle": "Errore nel download dell'immagine",
+      "downloadErrorMessage": "Impossibile scaricare l'immagine remota per il ritaglio (controlla l'URL o la tua connessione). Vuoi caricare un'immagine dai tuoi file?",
+      "processorTitle": "Regola e comprimi l'immagine",
+      "tooWide": "Il ritaglio è troppo largo. Prova a renderlo più alto o a ridurre la larghezza.",
+      "tooHigh": "Il ritaglio è troppo alto. Prova a renderlo più largo o a ridurre l'altezza.",
+      "ratio": "(Ratio attuale: {{ actual }} | Consentito: {{ min }} a {{ max }})",
+      "finalQuality": "Qualità finale: {{quality}}%",
+      "preview": "Anteprima del risultato"
     },
-    "save": "Salva",
     "selectInput": {
       "placeholder": "Seleziona un'opzione",
       "search": "Cerca..."

@@ -49,33 +49,3 @@
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border);
 }
-
-.btn-save {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--success);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.2s;
-}
-
-.btn-save:hover {
-  opacity: 0.8;
-}
-
-.btn-cancel {
-  padding: var(--spacing-sm) var(--spacing-md);
-  background-color: var(--error);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.2s;
-}
-
-.btn-cancel:hover {
-  opacity: 0.8;
-}

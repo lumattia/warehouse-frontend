@@ -1,0 +1,48 @@
+<div class="modal-box-embedded">
+
+  <div class="modal-header">
+    <h3>{{'shared.imageInput.processorTitle' | translate}}</h3>
+    <button class="close-btn" (click)="onCancelClick()">✕</button>
+  </div>
+    <div class="cropper-container">
+      <image-cropper
+        [imageBase64]="imageBase64Signal()"
+        [maintainAspectRatio]="!!fixedAspectRatio"
+        [aspectRatio]="fixedAspectRatio"
+        (cropperChange)="onCropChange($event)"
+        (imageCropped)="onCrop($event)"
+        [imageQuality]="quality() * 100"
+        [onlyScaleDown]="true"
+        [resizeToWidth]="maxWidth"
+        [resizeToHeight]="maxHeight"
+        output="base64"
+        >
+      </image-cropper>
+    </div>
+    
+    <div class="validation-alert error" *ngIf="!isRatioValid()">
+      ⚠️ <strong>{{ ratioInstructionMessage() | translate}}</strong>
+      <span class="d-block text-muted small">
+        {{'shared.imageInput.ratio' | translate:{actual:currentCropRatio().toFixed(2), min:minAspectRatio.toFixed(2), max:maxAspectRatio.toFixed(2)} }}
+      </span>
+    </div>
+    
+    <hr class="section-divider" />
+    <div class="controls-grid">
+      <div class="input-group col-span-3">
+        <label>{{'shared.imageInput.finalQuality' | translate:{quality: (quality() * 100).toFixed(0)} }}</label>
+        <input type="range" [ngModel]="quality()" (ngModelChange)="quality.set($event)" min="0.1" max="1" step="0.1">
+      </div>
+    </div>
+    <div class="result-preview-box">
+      <h4>{{'shared.imageInput.preview' | translate}}</h4>
+      <div class="preview-info">
+        <img [src]="resultBase64()">
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <app-button variant="secondary" (click)="onCancelClick()">{{'shared.cancel' | translate}}</app-button>
+      <app-button (click)="saveImage()" [disabled]="!isFormValid()">{{'shared.save' | translate}}</app-button>
+    </div>
+</div>

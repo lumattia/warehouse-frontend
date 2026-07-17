@@ -219,23 +219,27 @@
     "stop": "停止模拟"
   },
   "shared": {
-    "actions": {
-      "cancel": "取消",
-      "delete": "删除",
-      "edit": "编辑",
-      "remove": "移除",
-      "save": "保存"
-    },
+    "delete": "删除",
+    "remove": "移除",
     "cancel": "取消",
+    "edit": "编辑",
+    "save": "保存",
+    "upload": "上传",
     "colorInput": {
       "invalid": "无效的十六进制颜色格式（例如：#000000 或 #FFF）",
       "label": "颜色"
     },
-    "edit": "编辑",
     "imageInput": {
-      "label": "图片"
+      "selectImage": "选择图片...",
+      "downloadErrorTitle": "下载图片失败",
+      "downloadErrorMessage": "无法下载远程图片用于裁剪（请检查URL或您的连接）。是否要从您的文件中上传图片？",
+      "processorTitle": "调整和压缩图片",
+      "tooWide": "裁剪过宽。尝试使其更高或减少宽度。",
+      "tooHigh": "裁剪过高。尝试使其更宽或减少高度。",
+      "ratio": "(当前比率: {{ actual }} | 允许: {{ min }} 到 {{ max }})",
+      "finalQuality": "最终质量: {{quality}}%",
+      "preview": "结果预览"
     },
-    "save": "保存",
     "selectInput": {
       "placeholder": "选择一个选项",
       "search": "搜索..."

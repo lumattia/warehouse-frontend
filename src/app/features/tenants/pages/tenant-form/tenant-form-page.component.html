@@ -1,95 +1,107 @@
-<main class="tenant-form-container">
+<main class="container">
   <h1>{{ (id ? 'tenants.edit' : 'tenants.new') | translate }}</h1>
 
   @if (loading()) {
     <app-loading text="Loading..." />
   } @else {
-    <form class="tenant-form">
+    <form class="form">
       @if (!id) {
-        <!-- Add mode: single save button for all sections -->
-        <div class="add-mode-form">
-          <app-collapsible-section
-            titleKey="tenants.sections.basicInfo"
-            [showActions]="false">
-            <div class="form-grid">
-              <app-text-input
-                labelKey="tenants.form.name"
-                placeholderKey="tenants.form.namePlaceholder"
-                [control]="getControl('name')"
-              />
-            </div>
-          </app-collapsible-section>
-
-          <app-collapsible-section
-            titleKey="tenants.sections.modules"
-            [showActions]="false">
-            <div class="modules-section">
-              <div class="modules-list">
-                @for (module of moduleOptions; track module.id) {
-                  <label class="module-checkbox">
-                    <input
-                      type="checkbox"
-                      [value]="module.id"
-                      [checked]="modules.includes(module.id)"
-                      (change)="onModuleChange(module.id, $event.target)"
-                    />
-                    <span>{{ module.name | translate }}</span>
-                  </label>
-                }
-              </div>
-            </div>
-          </app-collapsible-section>
-
-          <div class="actions">
-            <app-button
-              type="submit"
-              variant="primary"
-              (click)="save()">
-              {{ 'shared.actions.save' | translate }}
-            </app-button>
+        <app-image-input
+          [maxHeight]="30"
+          [maxWidth]="200"
+          [minAspectRatio]="1/1"
+          [maxAspectRatio]="6/1"
+          [existingImageUrl]="getControl('logoUrl').value"
+          [originalFileName]="getControl('logoFileName').value"
+          (fileChanged)="getControl('logoFileName').setValue($event)"
+        />
+        <app-collapsible-section
+          titleKey="tenants.sections.basicInfo"
+          [showActions]="false">
+          <div class="form-grid">
+            <app-text-input
+              labelKey="tenants.form.name"
+              placeholderKey="tenants.form.namePlaceholder"
+              [control]="getControl('name')"
+            />
           </div>
+        </app-collapsible-section>
+
+        <app-collapsible-section
+          titleKey="tenants.sections.modules"
+          [showActions]="false">
+          <div class="modules-section">
+            <div class="modules-list">
+              @for (module of moduleOptions; track module.id) {
+                <label class="module-checkbox">
+                  <input
+                    type="checkbox"
+                    [value]="module.id"
+                    [checked]="modules.includes(module.id)"
+                    (change)="onModuleChange(module.id, $event.target)"
+                  />
+                  <span>{{ module.name | translate }}</span>
+                </label>
+              }
+            </div>
+          </div>
+        </app-collapsible-section>
+
+        <div class="actions">
+          <app-button
+            type="submit"
+            variant="primary"
+            (click)="save()">
+            {{ 'shared.save' | translate }}
+          </app-button>
         </div>
       } @else {
-        <!-- Edit mode: individual save buttons per section -->
-        <div class="edit-mode-form">
-          <app-collapsible-section
-            titleKey="tenants.sections.basicInfo"
-            [isEditMode]="!isSectionEditing('basicInfo')"
-            [isValid]="isSectionValid('basicInfo')"
-            (save)="saveSection('basicInfo')"
-            (cancel)="resetSection('basicInfo')"
-            (edit)="toggleSectionEdit('basicInfo')">
-            <div class="form-grid">
-              <app-text-input
-                labelKey="tenants.form.name"
-                placeholderKey="tenants.form.namePlaceholder"
-                [control]="getControl('name')"
-                [readonly]="!isSectionEditing('basicInfo')"
-              />
-            </div>
-          </app-collapsible-section>
+        <app-image-input
+          [maxHeight]="30"
+          [maxWidth]="200"
+          [minAspectRatio]="1/1"
+          [maxAspectRatio]="6/1"
+          [existingImageUrl]="getControl('logoUrl').value"
+          [originalFileName]="getControl('logoFileName').value"
+          (fileChanged)="getControl('logoFileName').setValue($event)"
+        />
+        <app-collapsible-section
+          titleKey="tenants.sections.basicInfo"
+          [isEditMode]="!isSectionEditing('basicInfo')"
+          [isValid]="isSectionValid('basicInfo')"
+          (save)="saveSection('basicInfo')"
+          (cancel)="resetSection('basicInfo')"
+          (edit)="toggleSectionEdit('basicInfo')">
+          <div class="form-grid">
+            <app-text-input
+              labelKey="tenants.form.name"
+              placeholderKey="tenants.form.namePlaceholder"
+              [control]="getControl('name')"
+              [readonly]="!isSectionEditing('basicInfo')"
+            />
+          </div>
+        </app-collapsible-section>
 
-          <app-collapsible-section
-            titleKey="tenants.sections.modules"
-            [isEditMode]="!isSectionEditing('modules')"
-            [isValid]="isSectionValid('modules')"
-            (save)="saveSection('modules')"
-            (cancel)="resetSection('modules')"
-            (edit)="toggleSectionEdit('modules')">
-            <div class="modules-section">
-              <div class="modules-list">
-                @for (module of moduleOptions; track module.id) {
-                  <app-checkbox-input
-                    [labelKey]="module.name"
-                    [control]="getControl('modules')"
-                    [value]="modules.includes(module.id)"
-                    [readonly]="!isSectionEditing('modules')"
-                  />
-                }
-              </div>
+        <app-collapsible-section
+          titleKey="tenants.sections.modules"
+          [isEditMode]="!isSectionEditing('modules')"
+          [isValid]="isSectionValid('modules')"
+          (save)="saveSection('modules')"
+          (cancel)="resetSection('modules')"
+          (edit)="toggleSectionEdit('modules')">
+          <div class="modules-section">
+            <div class="modules-list">
+              @for (module of moduleOptions; track module.id) {
+                <app-checkbox-input
+                  [labelKey]="module.name"
+                  [control]="getControl('modules')"
+                  [value]="modules.includes(module.id)"
+                  [readonly]="!isSectionEditing('modules')"
+                />
+              }
             </div>
-          </app-collapsible-section>
-        </div>
+          </div>
+        </app-collapsible-section>
       }
     </form>
   }

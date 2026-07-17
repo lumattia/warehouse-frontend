@@ -23,7 +23,6 @@ export class LanguageSelectorComponent {
   currentLang = signal(this.translate.currentLang || 'es');
   ngOnInit() {
     const savedLang = localStorage.getItem('user_language') || this.translate.currentLang || 'es';
-    console.log(savedLang)
     this.translate.use(savedLang);
     this.currentLang.set(savedLang);
   }

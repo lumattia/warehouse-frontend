@@ -13,6 +13,7 @@ import { CheckboxInputComponent } from '../../../../shared/components/inputs/che
 import { LoadingComponent } from '../../../../shared/components/loading/loading.component';
 import { ModalService } from '../../../../shared/services/modal.service';
 import { GenericErrorModalComponent } from '../../../../shared/components/modals/generic-error-modal/generic-error-modal.component';
+import { ImageInputComponent } from '../../../../shared/components/inputs/image-input/image-input.component';
 
 @Component({
   selector: 'app-tenant-form-page',
@@ -26,6 +27,7 @@ import { GenericErrorModalComponent } from '../../../../shared/components/modals
     CollapsibleSectionComponent,
     CheckboxInputComponent,
     LoadingComponent,
+    ImageInputComponent
   ],
   templateUrl: './tenant-form-page.component.html',
   styleUrls: ['./tenant-form-page.component.css'],
@@ -38,7 +40,10 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
 
   id: string | null = null;
   tenantForm = new FormGroup({
-    name: new FormControl('', [Validators.required])
+    name: new FormControl('', [Validators.required]),
+    logoUrl: new FormControl(''),
+    logoFileName: new FormControl(),
+    logoFile: new FormControl(''),
   });
   modules: ModuleType[] = [];
   moduleOptions = [

@@ -121,7 +121,7 @@ export class DressListPageComponent implements OnInit {
   deleteDress(id: number) {
     const modalRef = this.modalService.open(ConfirmModalComponent, {
       open: true,
-      title: 'shared.actions.delete',
+      title: 'shared.delete',
       message: 'dresses.form.deleteConfirm'
     });
     modalRef.result.then((confirmed) => {

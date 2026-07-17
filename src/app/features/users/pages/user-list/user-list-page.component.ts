@@ -97,7 +97,7 @@ export class UserListPageComponent implements OnInit {
   deleteUser(id: number) {
     const modalRef = this.modalService.open(ConfirmModalComponent, {
       open: true,
-      title: 'shared.actions.delete',
+      title: 'shared.delete',
       message: 'users.form.deleteConfirm'
     });
     

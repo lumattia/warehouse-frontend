@@ -1,11 +1,6 @@
 import { Injectable, ComponentRef, ApplicationRef, EnvironmentInjector, createComponent, Type } from '@angular/core';
 
 export interface ModalConfig {
-  backdrop?: boolean | 'static';
-  keyboard?: boolean;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
-  centered?: boolean;
-  scrollable?: boolean;
   [key: string]: any;
 }
 
@@ -62,9 +57,7 @@ export class ModalService {
   
     // Apply config to component instance using setInput to trigger change detection
     for (const key in config) {
-      if (config.hasOwnProperty(key)) {
-        componentRef.setInput(key, config[key]);
-      }
+      componentRef.setInput(key, config[key]);
     }
     
     // Enable pointer events on container when modal is open

@@ -319,23 +319,27 @@
     "invalid": "Valor inválido"
   },
   "shared": {
-    "actions": {
-      "cancel": "Cancelar",
-      "delete": "Eliminar",
-      "edit": "Editar",
-      "remove": "Eliminar",
-      "save": "Guardar"
-    },
+    "delete": "Eliminar",
+    "remove": "Eliminar",
     "cancel": "Cancelar",
+    "edit": "Editar",
+    "save": "Guardar",
+    "upload": "Subir",
     "colorInput": {
       "invalid": "Formato hexadecimal inválido (ej: #000000 o #FFF)",
       "label": "Color"
     },
-    "edit": "Editar",
     "imageInput": {
-      "label": "Imagen"
+      "selectImage": "Seleccionar imagen...",
+      "downloadErrorTitle": "Error al descargar la imagen",
+      "downloadErrorMessage": "No se pudo descargar la imagen remota (verifica la URL o tu conexión). ¿Deseas subir una imagen desde tus carpetas?",
+      "processorTitle": "Ajustar y Comprimir Imagen",
+      "tooWide":"El recorte es demasiado ancho. Intenta hacerlo más alto o reducir el ancho.",
+      "tooHigh":"El recorte es demasiado alto. Intenta hacerlo más ancho o reducir el alto.",
+      "ratio": "(Ratio actual: {{ actual }} | Permitido: {{ min }} a {{ max }})",
+      "finalQuality": "Calidad final: {{quality}}%",
+      "preview":"Vista Previa del Resultado"
     },
-    "save": "Guardar",
     "selectInput": {
       "placeholder": "Selecciona una opción",
       "search": "Buscar..."

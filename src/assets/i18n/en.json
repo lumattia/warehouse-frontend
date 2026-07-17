@@ -319,23 +319,27 @@
     "invalid": "Invalid value"
   },
   "shared": {
-    "actions": {
-      "cancel": "Cancel",
-      "delete": "Delete",
-      "edit": "Edit",
-      "remove": "Remove",
-      "save": "Save"
-    },
+    "delete": "Delete",
+    "remove": "Remove",
     "cancel": "Cancel",
+    "edit": "Edit",
+    "save": "Save",
+    "upload": "Upload",
     "colorInput": {
       "invalid": "Invalid hex color format (e.g., #000000 or #FFF)",
       "label": "Color"
     },
-    "edit": "Edit",
     "imageInput": {
-      "label": "Image"
+      "selectImage": "Select image...",
+      "downloadErrorTitle": "Error downloading image",
+      "downloadErrorMessage": "Could not download remote image for cropping (check URL or your connection). Do you want to upload an image from your files?",
+      "processorTitle": "Adjust and Compress Image",
+      "tooWide": "The crop is too wide. Try making it taller or reducing the width.",
+      "tooHigh": "The crop is too high. Try making it wider or reducing the height.",
+      "ratio": "(Current ratio: {{ actual }} | Allowed: {{ min }} to {{ max }})",
+      "finalQuality": "Final quality: {{quality}}%",
+      "preview": "Preview of the result"
     },
-    "save": "Save",
     "selectInput": {
       "placeholder": "Select an option",
       "search": "Search..."

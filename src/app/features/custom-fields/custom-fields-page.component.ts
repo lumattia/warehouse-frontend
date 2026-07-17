@@ -326,7 +326,6 @@ export class CustomFieldsPageComponent implements OnInit, CanDeactivateComponent
     const sourceIndex = sourceFields.findIndex(f => f.id === fieldId);
     const targetIndex = targetField ? targetFields.findIndex(f => f.id === targetField.id) : -1;
     if (sourceIndex === -1) return;
-    console.log(sourceGroupId, groupId)
     if (sourceGroupId === groupId) {
       if (targetIndex !== -1 && sourceIndex !== targetIndex) {
         const [movedField] = sourceFields.splice(sourceIndex, 1);

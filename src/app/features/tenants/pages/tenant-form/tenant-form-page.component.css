@@ -1,20 +1,3 @@
-.tenant-form-container {
-  padding: var(--spacing-2xl);
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.tenant-form-container h1 {
-  margin-bottom: var(--spacing-2xl);
-  color: var(--text);
-}
-
-.tenant-form {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-}
-
 .modules-section {
   display: flex;
   flex-direction: column;
@@ -30,46 +13,4 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-}
-
-.actions {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-2xl);
-}
-
-.btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  transition: background-color 0.2s;
-}
-
-.btn-primary {
-  background-color: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  opacity: 0.8;
-}
-
-.btn-danger {
-  background-color: var(--error);
-  color: white;
-}
-
-.btn-danger:hover {
-  opacity: 0.8;
-}
-
-.btn {
-  background-color: var(--secondary);
-  color: white;
-}
-
-.btn:hover {
-  opacity: 0.8;
 }

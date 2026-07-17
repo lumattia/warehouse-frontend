@@ -20,12 +20,6 @@
   min-width: 200px;
 }
 
-.actions-bar {
-  display: flex;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-}
-
 .groups-container {
   display: flex;
   flex-direction: column;
@@ -36,12 +30,12 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
-  background-color: var(--bg-alt);
+  background-color: var(--bg);
   cursor: move;
 }
 
-.group-item:hover {
-  background-color: var(--bg-tertiary);
+.group-item:hover:not(:has(.field-item:hover)) {
+  background-color: var(--bg-alt);
 }
 
 .group-header {
@@ -58,8 +52,7 @@
   font-size: var(--font-size-lg);
 }
 
-.group-actions {
-  display: flex;
+.actions {
   gap: var(--spacing-xs);
 }
 
@@ -82,7 +75,7 @@
 }
 
 .field-item:hover {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-alt);
 }
 
 .field-info {
@@ -107,11 +100,6 @@
 .field-required {
   color: var(--error);
   font-weight: bold;
-}
-
-.field-actions {
-  display: flex;
-  gap: var(--spacing-xs);
 }
 
 /* Modal Styles */

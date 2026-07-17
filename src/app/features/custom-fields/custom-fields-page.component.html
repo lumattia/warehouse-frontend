@@ -7,14 +7,14 @@
       </div>
     </div>
     
-    <div class="actions-bar">
-      <app-button (click)="openGroupModal()">{{ 'customFields.actions.addGroup' | translate }}</app-button>
-      @if (hasUnsavedChanges()) {
-        <app-button (click)="saveOrders()">{{ 'customFields.actions.saveOrder' | translate }}</app-button>
-      }
-    </div>
-    
     <div class="groups-container">
+      
+      <div class="actions">
+        <app-button (click)="openGroupModal()">{{ 'customFields.actions.addGroup' | translate }}</app-button>
+        @if (hasUnsavedChanges()) {
+          <app-button (click)="saveOrders()">{{ 'customFields.actions.saveOrder' | translate }}</app-button>
+        }
+      </div>
       @for (group of groups(); track group.id; let i = $index) {
         <div 
         class="group-item"
@@ -25,9 +25,9 @@
         >
         <div class="group-header">
           <h3>{{ group.name }}</h3>
-          <div class="group-actions">
-            <app-button (click)="openGroupModal(group)">{{ 'shared.actions.edit' | translate }}</app-button>
-            <app-button variant="danger" (click)="confirmDelete('group', group.id, group.name)">{{ 'shared.actions.delete' | translate }}</app-button>
+          <div class="actions">
+            <app-button (click)="openGroupModal(group)">{{ 'shared.edit' | translate }}</app-button>
+            <app-button variant="danger" (click)="confirmDelete('group', group.id, group.name)">{{ 'shared.delete' | translate }}</app-button>
             <app-button (click)="openFieldModal(group.id)">{{ 'customFields.actions.addField' | translate }}</app-button>
           </div>
         </div>
@@ -48,9 +48,9 @@
                 <span class="field-required">*</span>
               }
             </div>
-            <div class="field-actions">
-              <app-button (click)="openFieldModal(group.id, field)">{{ 'shared.actions.edit' | translate }}</app-button>
-              <app-button variant="danger" (click)="confirmDelete('field', field.id, field.label)">{{ 'shared.actions.delete' | translate }}</app-button>
+            <div class="actions">
+              <app-button (click)="openFieldModal(group.id, field)">{{ 'shared.edit' | translate }}</app-button>
+              <app-button variant="danger" (click)="confirmDelete('field', field.id, field.label)">{{ 'shared.delete' | translate }}</app-button>
             </div>
           </div>
         }
@@ -79,8 +79,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <app-button (click)="closeGroupModal()">{{ 'shared.actions.cancel' | translate }}</app-button>
-        <app-button (click)="saveGroup()">{{ 'shared.actions.save' | translate }}</app-button>
+        <app-button (click)="closeGroupModal()">{{ 'shared.cancel' | translate }}</app-button>
+        <app-button (click)="saveGroup()">{{ 'shared.save' | translate }}</app-button>
       </div>
     </div>
   </div>
@@ -150,7 +150,7 @@
                     (input)="updateOption(i, $any($event.target).value)"
                     class="option-input"
                   />
-                  <app-button type="button" (click)="removeOption(i)">{{ 'shared.actions.remove' | translate }}</app-button>
+                  <app-button type="button" (click)="removeOption(i)">{{ 'shared.remove' | translate }}</app-button>
                 </div>
               }
               <app-button type="button" (click)="addOption()">{{ 'customFields.actions.addOption' | translate }}</app-button>
@@ -159,8 +159,8 @@
         </form>
       </div>
       <div class="modal-footer">
-        <app-button (click)="closeFieldModal()">{{ 'shared.actions.cancel' | translate }}</app-button>
-        <app-button (click)="saveField()">{{ 'shared.actions.save' | translate }}</app-button>
+        <app-button (click)="closeFieldModal()">{{ 'shared.cancel' | translate }}</app-button>
+        <app-button (click)="saveField()">{{ 'shared.save' | translate }}</app-button>
       </div>
     </div>
   </div>
