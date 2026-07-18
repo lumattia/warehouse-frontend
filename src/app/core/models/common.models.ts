@@ -20,3 +20,13 @@ export interface SortState {
   field: string;
   direction: 'asc' | 'desc';
 }
+export interface FileInfoRequest {
+  base64: string;
+  fileName: string;
+  contentType: string;
+}
+export interface FileInfoResponse {
+  url: string;
+  orioginalFileName: string;
+  size: number;
+}

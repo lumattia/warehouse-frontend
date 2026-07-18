@@ -24,7 +24,6 @@ export class SelectInputComponent implements OnInit {
   @Input() readonly = false;
   @Input() errorKey = '';
   @Input() showSearch = true;
-  @Input() showDirtyIndicator = false;
   @Input() showClearButton = true;
 
   @Output() valueChange = new EventEmitter<any>();
@@ -56,7 +55,7 @@ export class SelectInputComponent implements OnInit {
   }
 
   get isDirty(): boolean {
-    return this.showDirtyIndicator && !!this.control?.dirty;
+    return this.control?.dirty ?? false;
   }
 
   get selectedOptionName(): string {
@@ -138,6 +137,8 @@ export class SelectInputComponent implements OnInit {
   clearSelection(event: MouseEvent): void {
     event.stopPropagation();
     this.control!.setValue(null);
+    this.control!.markAsDirty();
+    this.control!.markAsTouched();
     this.value = null;
     this.valueChange.emit(null);
   }

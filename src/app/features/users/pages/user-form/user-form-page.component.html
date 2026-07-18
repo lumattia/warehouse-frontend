@@ -18,6 +18,7 @@
             <app-select-input
               labelKey="users.form.role"
               [options]="roleOptions"
+              [showClearButton]="false"
               [control]="getControl('role')"
             />
           </div>
@@ -26,6 +27,7 @@
           <app-button
             type="submit"
             variant="primary"
+            [disabled]="!this.userForm.valid"
             (click)="save()">
             {{ 'shared.save' | translate }}
           </app-button>
@@ -55,6 +57,7 @@
             <app-select-input
               labelKey="users.form.role"
               [options]="roleOptions"
+              [showClearButton]="false"
               [control]="getControl('role')"
               [readonly]="!isSectionEditing('basicInfo')"
             />

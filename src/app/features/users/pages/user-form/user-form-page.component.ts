@@ -90,42 +90,46 @@ export class UserFormPageComponent implements OnInit, CanDeactivateComponent {
 
   saveSection(section: string): void {
     if (!this.isSectionValid(section)) return;
-
+    if (!this.id) return;
     this.loading.set(true);
-
+    const updateRequest: UserUpdateRequest = {
+      id: this.id,
+      username: this.initialData.username || '',
+      role: this.initialData.role,
+      allowedTenantIds: this.initialData.allowedTenantIds,
+    };
     const formValue = this.userForm.value;
-    if (this.id) {
-      const updateRequest: UserUpdateRequest = {
-        id: this.id,
-        username: formValue.username || '',
-        role: (formValue.role || 'USER') as 'USER' | 'ADMIN' | 'SUPERADMIN',
-        allowedTenantIds: this.allowedTenantIds,
-      };
-      this.userService.update(this.id, updateRequest).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.editingSections.delete(section);
-          if (this.id) {
-            this.userService.getById(this.id).subscribe(data => {
-              this.initialData = {
-                username: data.username,
-                role: data.role,
-                allowedTenantIds: data.allowedTenants?.map(t => t.id.toString()) || []
-              };
-            });
-          }
-        },
-        error: (error) => {
-          this.loading.set(false);
-          this.modalService.open(GenericErrorModalComponent, {
-            title: 'users.error.title',
-            message: 'users.error.saveFailed',
-            type: 'error'
-          });
-          console.error('Error saving:', error);
-        }
-      });
+    switch(section){
+      case ('basicInfo'): 
+        updateRequest.username = formValue.username || '';
+        updateRequest.role = (formValue.role || 'USER') as 'USER' | 'ADMIN' | 'SUPERADMIN';
+        updateRequest.allowedTenantIds= this.allowedTenantIds;
+        break;
     }
+    this.userService.update(this.id, updateRequest).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.editingSections.delete(section);
+        if (this.id) {
+          this.userService.getById(this.id).subscribe(data => {
+            this.initialData = {
+              username: data.username,
+              role: data.role,
+              allowedTenantIds: data.allowedTenants?.map(t => t.id.toString()) || []
+            };
+          });
+        }
+      },
+      error: (error) => {
+        this.loading.set(false);
+        this.modalService.open(GenericErrorModalComponent, {
+          title: 'users.error.title',
+          message: 'users.error.saveFailed',
+          type: 'error'
+        });
+        console.error('Error saving:', error);
+      }
+    });
   }
 
   resetSection(section: string): void {
@@ -196,50 +200,27 @@ export class UserFormPageComponent implements OnInit, CanDeactivateComponent {
   save(): void {
     this.loading.set(true);
     const formValue = this.userForm.value;
-    if (this.id) {
-      const updateRequest: UserUpdateRequest = {
-        id: this.id,
-        username: formValue.username || '',
-        role: (formValue.role || 'USER') as 'USER' | 'ADMIN' | 'SUPERADMIN',
-        allowedTenantIds: this.allowedTenantIds,
-      };
-      this.userService.update(this.id, updateRequest).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.router.navigate(['/users']);
-        },
-        error: (error) => {
-          this.loading.set(false);
-          this.modalService.open(GenericErrorModalComponent, {
-            title: 'users.error.title',
-            message: 'users.error.saveFailed',
-            type: 'error'
-          });
-          console.error('Error saving:', error);
-        }
-      });
-    } else {
-      const createRequest: UserCreateRequest = {
-        username: formValue.username || '',
-        role: (formValue.role || 'USER') as 'USER' | 'ADMIN' | 'SUPERADMIN',
-        allowedTenantIds: this.allowedTenantIds,
-      };
-      this.userService.create(createRequest).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.router.navigate(['/users']);
-        },
-        error: (error) => {
-          this.loading.set(false);
-          this.modalService.open(GenericErrorModalComponent, {
-            title: 'users.error.title',
-            message: 'users.error.createFailed',
-            type: 'error'
-          });
-          console.error('Error creating user:', error);
-        }
-      });
-    }
+    const createRequest: UserCreateRequest = {
+      username: formValue.username || '',
+      role: (formValue.role || 'USER') as 'USER' | 'ADMIN' | 'SUPERADMIN',
+      allowedTenantIds: this.allowedTenantIds,
+    };
+    this.userService.create(createRequest).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.userForm.reset();
+        this.router.navigate(['/users']);
+      },
+      error: (error) => {
+        this.loading.set(false);
+        this.modalService.open(GenericErrorModalComponent, {
+          title: 'users.error.title',
+          message: 'users.error.createFailed',
+          type: 'error'
+        });
+        console.error('Error creating user:', error);
+      }
+    });
   }
 
   enableEditMode(): void {

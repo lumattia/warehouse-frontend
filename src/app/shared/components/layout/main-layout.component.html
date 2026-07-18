@@ -3,8 +3,12 @@
   <aside class="sidenav" [class.collapsed]="sidenavCollapsed()">
     <div class="sidenav-header">
       <div class="logo">
-        <span class="logo-icon"><img src="assets/icons/box.svg" alt="SaaS Demo"></span>
-        <span class="logo-text" *ngIf="!sidenavCollapsed()">SaaS Demo</span>
+        @if (logo()) {
+          <img [src]="logo()" (error)="logo.set('')">
+        }@else {
+          <span class="logo-icon"><img src="assets/icons/box.svg" alt="SaaS Demo"></span>
+          <span class="logo-text" *ngIf="!sidenavCollapsed()">SaaS Demo</span>
+        }
       </div>
       <button class="sidenav-toggle" (click)="toggleSidenav()">
         <span class="toggle-icon"><img [src]="sidenavCollapsed() ? 'assets/icons/arrow-right.svg' : 'assets/icons/arrow-left.svg'" alt="Toggle"></span>

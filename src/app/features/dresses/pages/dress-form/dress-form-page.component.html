@@ -57,6 +57,7 @@
           <app-button
             type="submit"
             variant="primary"
+            [disabled]="!this.dressForm.valid || !this.customFieldsForm.valid"
             (click)="saveAll()">
             {{ 'shared.save' | translate }}
           </app-button>

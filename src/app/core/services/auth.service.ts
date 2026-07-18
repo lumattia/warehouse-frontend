@@ -46,11 +46,10 @@ export class AuthService {
           return this.auth0.getAccessTokenSilently().pipe(
             switchMap(token => {
               localStorage.setItem('access_token', token);
-              const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-              return this.http.get<User>(`${environment.apiUrl}/users/me`, { headers }).pipe(
+              return this.http.get<User>(`${environment.apiUrl}/users/me`).pipe(
                 switchMap(user => {
                   if (user && (user.role === 'RESELLER' || user.role === 'SUPERADMIN')) {
-                    return this.http.get<any[]>(`${environment.apiUrl}/tenants/list`, { headers }).pipe(
+                    return this.http.get<any[]>(`${environment.apiUrl}/tenants/list`).pipe(
                       tap(allowedTenants => {
                         user.allowedTenants = allowedTenants;
                       }),
@@ -115,7 +114,7 @@ export class AuthService {
     this.auth0.logout({ logoutParams: { returnTo: window.location.origin } });
   }
   deleteLocalStorage() {
-    localStorage.removeItem('access_token');
+    localStorage.removeItem('access_token');  
     localStorage.removeItem('user');
     localStorage.removeItem('impersonatingUserId');
   }
@@ -123,9 +122,7 @@ export class AuthService {
   switchTenant(tenantId: string) {
     return this.tenantService.switchTenant(tenantId).pipe(
       tap(user => {
-        this.userSignal.set(user);
-        localStorage.setItem('user', JSON.stringify(user));
-        window.location.reload();
+        this.init().subscribe();
       })
     );
   }

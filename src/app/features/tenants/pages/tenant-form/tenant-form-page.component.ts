@@ -14,6 +14,8 @@ import { LoadingComponent } from '../../../../shared/components/loading/loading.
 import { ModalService } from '../../../../shared/services/modal.service';
 import { GenericErrorModalComponent } from '../../../../shared/components/modals/generic-error-modal/generic-error-modal.component';
 import { ImageInputComponent } from '../../../../shared/components/inputs/image-input/image-input.component';
+import { AuthService } from '../../../../core/services/auth.service';
+import { FileInfoRequest, FileInfoResponse } from '../../../../core/models/common.models';
 
 @Component({
   selector: 'app-tenant-form-page',
@@ -33,6 +35,7 @@ import { ImageInputComponent } from '../../../../shared/components/inputs/image-
   styleUrls: ['./tenant-form-page.component.css'],
 })
 export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
+  private authService = inject(AuthService);
   private tenantService = inject(TenantService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -41,16 +44,14 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
   id: string | null = null;
   tenantForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
-    logoUrl: new FormControl(''),
-    logoFileName: new FormControl(),
-    logoFile: new FormControl(''),
+    existingLogo: new FormControl<FileInfoResponse | undefined>(undefined),
+    newLogo: new FormControl<FileInfoRequest | undefined>(undefined),
   });
   modules: ModuleType[] = [];
   moduleOptions = [
     { id: ModuleType.DRESS, name: 'tenants.form.modules.DRESS' },
     { id: ModuleType.DRESS_MOVEMENT, name: 'tenants.form.modules.DRESS_MOVEMENT' },
   ];
-  isEditMode = false;
   initialData: any = null;
   editingSections = new Set<string>();
   loading = signal<boolean>(false);
@@ -73,89 +74,73 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
 
   isSectionValid(section: string): boolean {
     switch (section) {
+      case 'logo':
+        return true;
       case 'basicInfo':
         return this.tenantForm.get('name')?.valid ?? false;
       case 'modules':
-        return this.modules.length > 0;
-      default:
         return true;
+      default:
+        return false;
     }
   }
 
   saveSection(section: string): void {
     if (!this.isSectionValid(section)) return;
-
+    if (!this.id) return;
     this.loading.set(true);
-
-    if (section === 'basicInfo') {
-      const formValue = this.tenantForm.value;
-      if (this.id) {
-        const updateRequest: TenantUpdateRequest = {
-          id: this.id,
-          name: formValue.name || '',
-          modules: this.modules || [],
-        };
-        this.tenantService.update(this.id, updateRequest).subscribe({
-          next: () => {
-            this.loading.set(false);
-            this.editingSections.delete(section);
-            if (this.id) {
-              this.tenantService.getById(this.id).subscribe(data => {
-                this.initialData = {
-                  name: data.name,
-                  modules: data.modules || []
-                };
-              });
-            }
-          },
-          error: (error) => {
-            this.loading.set(false);
-            this.modalService.open(GenericErrorModalComponent, {
-              title: 'tenants.error.title',
-              message: 'tenants.error.saveFailed',
-              type: 'error'
-            });
-            console.error('Error saving:', error);
-          }
-        });
-      }
-    } else if (section === 'modules') {
-      if (this.id) {
-        const updateRequest: TenantUpdateRequest = {
-          id: this.id,
-          name: this.tenantForm.value.name || '',
-          modules: this.modules || [],
-        };
-        this.tenantService.update(this.id, updateRequest).subscribe({
-          next: () => {
-            this.loading.set(false);
-            this.editingSections.delete(section);
-            if (this.id) {
-              this.tenantService.getById(this.id).subscribe(data => {
-                this.initialData = {
-                  name: data.name,
-                  modules: data.modules || []
-                };
-              });
-            }
-          },
-          error: (error) => {
-            this.loading.set(false);
-            this.modalService.open(GenericErrorModalComponent, {
-              title: 'tenants.error.title',
-              message: 'tenants.error.saveFailed',
-              type: 'error'
-            });
-            console.error('Error saving:', error);
-          }
-        });
-      }
+    const updateRequest: TenantUpdateRequest = {
+      id: this.id,
+      name: this.initialData.name,
+      modules: this.initialData.modules,
+    };
+    const formValue = this.tenantForm.value;
+    switch(section){
+      case ('logo'): 
+        updateRequest.logo = formValue.newLogo || undefined;
+        break;
+      case ('basicInfo'): 
+        updateRequest.name = formValue.name || '';
+        break;
+      case ('modules'): 
+        updateRequest.modules = this.modules;
+        break;
     }
+    this.tenantService.update(this.id, updateRequest).subscribe({
+      next: (data) => {
+        this.loading.set(false);
+        this.editingSections.delete(section);
+        this.initialData = {
+          name: data.name,
+          logo: data.logo,
+          modules: data.modules || [],
+        };
+        if (this.id == this.authService.user()?.tenant?.id) {
+          // Cheat to update tenant
+          this.authService.init().subscribe();
+        }
+      },
+      error: (error) => {
+        this.loading.set(false);
+        this.modalService.open(GenericErrorModalComponent, {
+          title: 'tenants.error.title',
+          message: 'tenants.error.saveFailed',
+          type: 'error'
+        });
+        console.error('Error saving:', error);
+      }
+    });
   }
 
   resetSection(section: string): void {
     if (this.initialData) {
-      if (section === 'basicInfo') {
+      if (section === 'logo') {
+        this.tenantForm.patchValue({
+          existingLogo: this.initialData.logo,
+          newLogo: undefined,
+        });
+      }
+      else if (section === 'basicInfo') {
         this.tenantForm.patchValue({
           name: this.initialData.name
         });
@@ -170,13 +155,14 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam && idParam !== 'new') {
       this.id = idParam;
-      this.isEditMode = false;
       this.loading.set(true);
 
       this.route.queryParamMap.subscribe((params: ParamMap) => {
         const editParam = params.get('edit');
         if (editParam === 'true') {
-          this.isEditMode = true;
+          this.editingSections.add('logo');
+          this.editingSections.add('basicInfo');
+          this.editingSections.add('modules');
         }
       });
 
@@ -184,10 +170,12 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
         this.loading.set(false);
         this.initialData = {
           name: data.name,
-          modules: data.modules || []
+          modules: data.modules || [],
+          logo: data.logo
         };
         this.tenantForm.patchValue({
-          name: data.name
+          name: data.name,
+          existingLogo: data.logo,
         });
         this.modules = data.modules || [];
       }, error => {
@@ -199,56 +187,33 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
         });
         console.error('Error loading tenant:', error);
       });
-    } else {
-      this.isEditMode = true;
     }
   }
 
   save(): void {
     this.loading.set(true);
     const formValue = this.tenantForm.value;
-    if (this.id) {
-      const updateRequest: TenantUpdateRequest = {
-        id: this.id,
-        name: formValue.name || '',
-        modules: this.modules || [],
-      };
-      this.tenantService.update(this.id, updateRequest).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.router.navigate(['/tenants']);
-        },
-        error: (error) => {
-          this.loading.set(false);
-          this.modalService.open(GenericErrorModalComponent, {
-            title: 'tenants.error.title',
-            message: 'tenants.error.saveFailed',
-            type: 'error'
-          });
-          console.error('Error saving:', error);
-        }
-      });
-    } else {
-      const createRequest: TenantCreateRequest = {
-        name: formValue.name || '',
-        modules: this.modules || [],
-      };
-      this.tenantService.create(createRequest).subscribe({
-        next: () => {
-          this.loading.set(false);
-          this.router.navigate(['/tenants']);
-        },
-        error: (error) => {
-          this.loading.set(false);
-          this.modalService.open(GenericErrorModalComponent, {
-            title: 'tenants.error.title',
-            message: 'tenants.error.createFailed',
-            type: 'error'
-          });
-          console.error('Error creating tenant:', error);
-        }
-      });
-    }
+    const createRequest: TenantCreateRequest = {
+      name: formValue.name || '',
+      modules: this.modules || [],
+      logo: formValue.newLogo || undefined
+    };
+    this.tenantService.create(createRequest).subscribe({
+      next: () => {
+        this.loading.set(false);
+        this.tenantForm.reset();
+        this.router.navigate(['/tenants']);
+      },
+      error: (error) => {
+        this.loading.set(false);
+        this.modalService.open(GenericErrorModalComponent, {
+          title: 'tenants.error.title',
+          message: 'tenants.error.createFailed',
+          type: 'error'
+        });
+        console.error('Error creating tenant:', error);
+      }
+    });
   }
 
 
@@ -256,37 +221,13 @@ export class TenantFormPageComponent implements OnInit, CanDeactivateComponent {
     this.router.navigate(['/tenants']);
   }
 
-  enableEditMode(): void {
-    this.isEditMode = true;
-  }
-
-  cancelEdit(): void {
-    if (!this.id) {
-      this.router.navigate(['/tenants']);
-      return;
+  onModuleChange(module: ModuleType) {
+    const index = this.modules.indexOf(module);
+    if (index > -1) {
+      this.modules.splice(index, 1);
     }
-    this.isEditMode = false;
-    if (this.initialData) {
-      this.tenantForm.patchValue({
-        name: this.initialData.name
-      });
-      this.modules = this.initialData.modules;
-    }
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { edit: null },
-      queryParamsHandling: 'merge'
-    });
-  }
-
-  onModuleChange(module: ModuleType, target: EventTarget|null) {
-    if (target && (target as HTMLInputElement).checked) {
+    else{
       this.modules.push(module);
-    } else {
-      const index = this.modules.indexOf(module);
-      if (index > -1) {
-        this.modules.splice(index, 1);
-      }
     }
   }
 

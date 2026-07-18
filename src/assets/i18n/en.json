@@ -188,6 +188,7 @@
       "deleteConfirm": "Are you sure you want to delete this tenant?"
     },
     "sections": {
+      "logo": "Logo",
       "basicInfo": "Basic Info",
       "modules": "Modules"
     }

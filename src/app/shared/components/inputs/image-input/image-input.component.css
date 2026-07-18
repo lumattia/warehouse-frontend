@@ -4,6 +4,15 @@
   cursor: pointer;
 }
 
+.image-input-wrapper.readonly {
+  cursor: default;
+}
+.image-input-wrapper.readonly .input-field{
+  cursor: default;
+  background-color: var(--bg-disabled);
+  opacity: 0.8;
+}
+
 .input-field {
   display: flex;
   align-items: center;
@@ -17,12 +26,8 @@
   transition: all var(--transition-fast) ease-in-out;
 }
 
-.input-field:hover {
-  border-color: var(--border-secondary);
-}
-
 .image-input-wrapper:focus-within .input-field,
-.input-field:active {
+.input-field:not(.readonly):active {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px var(--primary-disabled);
 }
@@ -61,27 +66,12 @@
   max-height: 400px;
 }
 
-.action-tag {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-wider);
-  transition: background-color var(--transition-fast);
-}
-
-.action-tag.upload {
-  background-color: var(--background-secondary);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-primary);
-}
-
-.input-field:hover .action-tag.upload {
+.input-field:not(.readonly):hover .action-tag.upload {
   background-color: var(--background-tertiary);
   color: var(--text-primary);
 }
 
-.input-field:hover {
+.input-field:not(.readonly):hover {
   background-color: var(--background-secondary);
+  border-color: var(--border-secondary);
 }

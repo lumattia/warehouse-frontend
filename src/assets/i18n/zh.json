@@ -299,6 +299,7 @@
     },
     "new": "新建租户",
     "sections": {
+      "logo": "标志",
       "basicInfo": "基本信息",
       "modules": "模块"
     },

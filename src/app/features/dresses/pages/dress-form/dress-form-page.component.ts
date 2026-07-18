@@ -49,7 +49,7 @@ export class DressFormPageComponent implements OnInit, CanDeactivateComponent {
     sku: new FormControl('', Validators.required),
     size: new FormControl(''),
     color: new FormControl('#000000'),
-    price: new FormControl(0, Validators.min(0))
+    price: new FormControl(0, [Validators.required, Validators.min(0.01)])
   });
   customFieldsForm = new FormGroup({});
   editingSections = new Set<string>();
@@ -102,6 +102,8 @@ export class DressFormPageComponent implements OnInit, CanDeactivateComponent {
           this.customFieldService.saveValues(this.module, this.id, { customFields }).subscribe({
             next: () => {
               this.loading.set(false);
+              this.dressForm.reset();
+              this.customFieldsForm.reset();
               this.router.navigate(['/dresses']);
             },
             error: (error) => {
@@ -116,6 +118,8 @@ export class DressFormPageComponent implements OnInit, CanDeactivateComponent {
           });
         } else {
           this.loading.set(false);
+          this.dressForm.reset();
+          this.customFieldsForm.reset();
           this.router.navigate(['/dresses']);
         }
       },
@@ -156,14 +160,10 @@ export class DressFormPageComponent implements OnInit, CanDeactivateComponent {
     this.dressService.update(this.id, partialDress).subscribe({
       next: () => {
         this.loading.set(false);
-        fields.forEach(f => {
-          let control = this.dressForm.get(f);
-          if (control) {
-            this.initialData = partialDress as Dress;
-            control.markAsPristine();
-          }
+        Object.keys(partialDress).forEach(key => {
+          (this.initialData as any)[key] = (partialDress as any)[key];
         });
-        this.editingSections.delete(section);
+        this.resetSection(section);
       },
       error: (error) => {
         this.loading.set(false);

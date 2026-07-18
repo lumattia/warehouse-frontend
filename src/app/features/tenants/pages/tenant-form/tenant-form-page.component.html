@@ -6,15 +6,19 @@
   } @else {
     <form class="form">
       @if (!id) {
-        <app-image-input
-          [maxHeight]="30"
-          [maxWidth]="200"
-          [minAspectRatio]="1/1"
-          [maxAspectRatio]="6/1"
-          [existingImageUrl]="getControl('logoUrl').value"
-          [originalFileName]="getControl('logoFileName').value"
-          (fileChanged)="getControl('logoFileName').setValue($event)"
-        />
+         <app-collapsible-section
+          titleKey="tenants.sections.logo"
+          [showActions]="false">
+            <app-image-input
+            [maxHeight]="30"
+            [maxWidth]="200"
+            [minAspectRatio]="1/1"
+            [maxAspectRatio]="6/1"
+            [maxAspectRatio]="6/1"
+            (fileChanged)="getControl('logo').setValue($event)"
+          />
+        </app-collapsible-section>
+     
         <app-collapsible-section
           titleKey="tenants.sections.basicInfo"
           [showActions]="false">
@@ -38,7 +42,7 @@
                     type="checkbox"
                     [value]="module.id"
                     [checked]="modules.includes(module.id)"
-                    (change)="onModuleChange(module.id, $event.target)"
+                    (change)="onModuleChange(module.id)"
                   />
                   <span>{{ module.name | translate }}</span>
                 </label>
@@ -56,15 +60,24 @@
           </app-button>
         </div>
       } @else {
-        <app-image-input
-          [maxHeight]="30"
-          [maxWidth]="200"
-          [minAspectRatio]="1/1"
-          [maxAspectRatio]="6/1"
-          [existingImageUrl]="getControl('logoUrl').value"
-          [originalFileName]="getControl('logoFileName').value"
-          (fileChanged)="getControl('logoFileName').setValue($event)"
-        />
+        <app-collapsible-section
+          titleKey="tenants.sections.logo"
+          [isEditMode]="!isSectionEditing('logo')"
+          [isValid]="isSectionValid('logo')"
+          (save)="saveSection('logo')"
+          (cancel)="resetSection('logo')"
+          (edit)="toggleSectionEdit('logo')">
+          <app-image-input
+            [maxHeight]="30"
+            [maxWidth]="200"
+            [minAspectRatio]="1/1"
+            [maxAspectRatio]="6/1"
+            [existingImageUrl]="getControl('existingLogo').value?.url"
+            [originalFileName]="getControl('existingLogo').value?.originalFileName"
+            (fileChanged)="getControl('newLogo').setValue($event)"
+            [readonly]="!isSectionEditing('logo')"
+          />
+        </app-collapsible-section>
         <app-collapsible-section
           titleKey="tenants.sections.basicInfo"
           [isEditMode]="!isSectionEditing('basicInfo')"
@@ -94,9 +107,9 @@
               @for (module of moduleOptions; track module.id) {
                 <app-checkbox-input
                   [labelKey]="module.name"
-                  [control]="getControl('modules')"
                   [value]="modules.includes(module.id)"
                   [readonly]="!isSectionEditing('modules')"
+                  (valueChange)="onModuleChange(module.id)"
                 />
               }
             </div>

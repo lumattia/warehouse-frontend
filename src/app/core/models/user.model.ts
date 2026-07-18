@@ -1,3 +1,6 @@
+import { IdName } from "./common.models";
+import { Tenant } from "./tenant.model";
+
 export interface User {
   id: number;
   username: string;
@@ -5,20 +8,6 @@ export interface User {
   tenant?: Tenant;
   allowedTenants?: IdName[];
   isEditable?: boolean;
-}
-
-export interface Tenant {
-  id: string;
-  name: string;
-  createdAt: string;
-  expiresAt: string;
-  hasCustomFields: boolean;
-  modules?: string[];
-}
-
-export interface IdName {
-  id: string;
-  name: string;
 }
 
 export interface UserFilter {

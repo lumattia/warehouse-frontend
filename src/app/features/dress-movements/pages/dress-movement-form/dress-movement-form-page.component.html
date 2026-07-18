@@ -14,6 +14,7 @@
             <app-select-input
               labelKey="dressMovements.form.dress"
               placeholderKey="dressMovements.form.dressPlaceholder"
+              [showClearButton]="false"
               [options]="dresses"
               [control]="getControl('dressId')"
             />
@@ -37,6 +38,7 @@
           <app-button
             type="submit"
             variant="primary"
+            [disabled]="!this.dressMovementForm.valid || !this.customFieldsForm.valid"
             (click)="saveAll()">
             {{ 'shared.save' | translate }}
           </app-button>
@@ -54,6 +56,7 @@
             <app-select-input
               labelKey="dressMovements.form.dress"
               placeholderKey="dressMovements.form.dressPlaceholder"
+              [showClearButton]="false"
               [options]="dresses"
               [control]="getControl('dressId')"
               [readonly]="!isSectionEditing('basicInfo')"

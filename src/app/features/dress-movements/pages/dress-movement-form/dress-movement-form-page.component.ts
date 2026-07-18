@@ -100,6 +100,8 @@ export class DressMovementFormPageComponent implements OnInit, CanDeactivateComp
           this.customFieldService.saveValues(this.module, this.id, { customFields }).subscribe({
             next: () => {
               this.loading.set(false);
+              this.dressMovementForm.reset();
+              this.customFieldsForm.reset();
               this.router.navigate(['/dress-movements']);
             },
             error: (error) => {
@@ -114,6 +116,8 @@ export class DressMovementFormPageComponent implements OnInit, CanDeactivateComp
           });
         } else {
           this.loading.set(false);
+          this.dressMovementForm.reset();
+          this.customFieldsForm.reset();
           this.router.navigate(['/dress-movements']);
         }
       },
@@ -136,31 +140,19 @@ export class DressMovementFormPageComponent implements OnInit, CanDeactivateComp
     const fields = this.sectionFields[section];
     if (!fields) return;
 
-    const formValue = this.dressMovementForm.value;
-    const item: any = {};
+    const partialDressMovement: Partial<DressMovement> = { ...this.initialData };
 
-    fields.forEach(field => {
-      if (field === 'dressId') {
-        (item as any)[field] = (formValue as any)[field] ? Number((formValue as any)[field]) : 0;
-      } else if (field === 'quantity') {
-        (item as any)[field] = (formValue as any)[field] ? Number((formValue as any)[field]) : 0;
-      } else {
-        (item as any)[field] = (formValue as any)[field] || '';
-      }
+    fields.forEach(f => {
+      partialDressMovement[f as keyof DressMovement] = this.dressMovementForm.get(f)?.value;
     });
 
-    if (Object.keys(item).length === 0) {
-      this.loading.set(false);
-      return;
-    }
-
-    this.dressMovementService.update(this.id, item as Partial<DressMovement>).subscribe({
+    this.dressMovementService.update(this.id, partialDressMovement).subscribe({
       next: () => {
         this.loading.set(false);
-        Object.keys(item).forEach(key => {
-          (this.initialData as any)[key] = (item as any)[key];
+        Object.keys(partialDressMovement).forEach(key => {
+          (this.initialData as any)[key] = (partialDressMovement as any)[key];
         });
-        this.editingSections.delete(section);
+        this.resetSection(section);
         this.cdr.detectChanges();
       },
       error: (error) => {

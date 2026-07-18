@@ -24,11 +24,9 @@ export class MainLayoutComponent {
 
   sidenavCollapsed = signal(false);
   pageTitle = signal('nav.home');
+  logo = signal(this.auth.user()?.tenant?.logo?.url??'');
   impersonatingUserId = this.impersonationService.impersonatingUserId;
 
-  ngOnInit() {
-  }
-  
   toggleSidenav(): void {
     this.sidenavCollapsed.update(collapsed => !collapsed);
   }

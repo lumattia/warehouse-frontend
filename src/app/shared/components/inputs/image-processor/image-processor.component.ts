@@ -71,24 +71,10 @@ export class ImageProcessorComponent implements OnChanges {
     this.cdr.detectChanges();
   }
 
-  // 1. Reemplazar imagen actual / Subir otra (Desde dentro del modal)
-  onFileSelected(event: any) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.imageBase64Signal.set(e.target.result);
-        this.cropCoords.set(null); // Reseteamos el cropper
-      };
-      reader.readAsDataURL(file);
-    }
-    event.target.value = '';
-  }
-
-  // 2. Limpiar imagen (Transición al estado vacío de subida)
   removeImage() {
     this.imageBase64Signal.set('');
     this.cropCoords.set(null);
+    this.close?.('')
   }
 
   onCropChange(event: CropperPosition) {

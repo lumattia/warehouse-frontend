@@ -115,7 +115,6 @@ export class ModalService {
       modalRef.resolve(result);
       this.destroyModal(componentRef);
     }
-    
     // Disable pointer events if no more modals are open
     if (this.activeModals.size === 0 && this.modalContainer) {
       this.modalContainer.style.pointerEvents = 'none';

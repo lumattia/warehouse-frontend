@@ -188,6 +188,7 @@
       "deleteConfirm": "¿Estás seguro de que quieres eliminar este tenant?"
     },
     "sections": {
+      "logo": "Logo",
       "basicInfo": "Información Básica",
       "modules": "Módulos"
     }
